@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>마인크래프트 유저 소개 및 팬 페이지</title>
+    <style>
+        /* 기본 초기화 및 폰트 설정 */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #121212;
+            color: #e0e0e0;
+            line-height: 1.6;
+        }
+
+        a {
+            text-shadow: none;
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* 네비게이션 헤더 (상단 고정) */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 70px;
+            background-color: #1f1f1f;
+            border-bottom: 3px solid #4CAF50;
+            z-index: 1000;
+            display: table;
+        }
+
+        .header-container {
+            display: table-cell;
+            vertical-align: middle;
+            padding: 0 40px;
+        }
+
+        .logo-text {
+            float: left;
+            font-size: 20px;
+            font-weight: bold;
+            color: #4CAF50;
+            line-height: 40px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        nav {
+            float: right;
+        }
+
+        nav ul {
+            list-style: none;
+        }
+
+        nav ul li {
+            display: inline-block;
+            margin-left: 30px;
+            line-height: 40px;
+        }
+
+        nav ul li a {
+            font-size: 15px;
+            font-weight: 500;
+            color: #ffffff;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: #4CAF50;
+        }
+
+        /* 히어로 섹션 */
+        .hero {
+            position: relative;
+            height: 100vh;
+            min-height: 600px;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        /* 슬라이드 배경 */
+        .slide-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+        }
+
+        .slide.active {
+            opacity: 1;
+        }
+
+        /* 오버레이 어둡게 처리 */
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.55);
+            z-index: 2;
+        }
+
+        /* 히어로 콘텐츠 */
+        .hero-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 3;
+            width: 90%;
+            max-width: 1200px;
+        }
+
+        .hero-logo {
+            width: 100%;
+            max-width: 900px;
+            height: auto;
+            margin-bottom: 30px;
+            filter: drop-shadow(0px 8px 16px rgba(0,0,0,0.8));
+        }
+
+        .cta-btn {
+            display: inline-block;
+            padding: 16px 40px;
+            background-color: #4CAF50;
+            color: #ffffff;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            border-bottom: 4px solid #388E3C;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.2s;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+        }
+
+        .cta-btn:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+        }
+
+        .cta-btn:active {
+            transform: translateY(1px);
+            border-bottom: 2px solid #388E3C;
+        }
+
+        /* 공통 섹션 스타일 */
+        section {
+            padding: 100px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 28px;
+            color: #ffffff;
+            margin-bottom: 40px;
+            text-align: center;
+            border-left: 5px solid #4CAF50;
+            padding-left: 15px;
+            display: inline-block;
+        }
+
+        .title-wrapper {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        /* Section 1: 게임 소개 */
+        #about {
+            background-color: #121212;
+        }
+
+        .about-box {
+            background-color: #1f1f1f;
+            border-radius: 8px;
+            padding: 40px;
+            border: 1px solid #2d2d2d;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .about-box p {
+            font-size: 17px;
+            margin-bottom: 20px;
+            color: #cccccc;
+            text-align: center;
+        }
+
+        /* Section 2: 주요 특징 (반응형 카드 그리드) */
+        #features {
+            background-color: #1a1a1a;
+            max-width: 100%;
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+        .features-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: block;
+        }
+
+        .card-row {
+            margin: 0 -15px;
+        }
+
+        .card-row::after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        .card-col {
+            float: left;
+            width: 33.333%;
+            padding: 0 15px;
+        }
+
+        .feature-card {
+            background-color: #242424;
+            border-radius: 8px;
+            padding: 40px 30px;
+            text-align: center;
+            border-top: 4px solid #4CAF50;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            height: 320px;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 30px rgba(76, 175, 80, 0.2);
+        }
+
+        .feature-card h3 {
+            font-size: 22px;
+            color: #ffffff;
+            margin-bottom: 15px;
+        }
+
+        .feature-card p {
+            font-size: 15px;
+            color: #aaaaaa;
+        }
+
+        /* Section 3: 최신 업데이트 소식 (강조 띠 형태) */
+        #updates {
+            background-color: #121212;
+        }
+
+        .update-banner {
+            background: linear-gradient(135deg, #1e3c1f 0%, #0d2410 100%);
+            border-left: 6px solid #4CAF50;
+            border-radius: 8px;
+            padding: 40px;
+            box-shadow: 0 6px 25px rgba(0,0,0,0.4);
+        }
+
+        .update-tag {
+            display: inline-block;
+            background-color: #4CAF50;
+            color: #ffffff;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 4px 10px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .update-banner h3 {
+            font-size: 26px;
+            color: #ffffff;
+            margin-bottom: 15px;
+        }
+
+        .update-banner p {
+            font-size: 16px;
+            color: #dddddd;
+            margin-bottom: 25px;
+        }
+
+        .sub-updates {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 20px;
+            margin-top: 20px;
+        }
+
+        .sub-updates h4 {
+            color: #4CAF50;
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        /* Section 4: 시스템 사양 */
+        #specs {
+            background-color: #1a1a1a;
+            max-width: 100%;
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+        .specs-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #222222;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 18px 24px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #2e2e2e;
+            color: #4CAF50;
+            font-size: 16px;
+            font-weight: bold;
+            border-bottom: 3px solid #4CAF50;
+        }
+
+        td {
+            border-bottom: 1px solid #333333;
+            font-size: 15px;
+            color: #dddddd;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background-color: #2a2a2a;
+        }
+
+        /* 푸터 */
+        footer {
+            background-color: #111111;
+            padding: 40px 20px;
+            text-align: center;
+            border-top: 1px solid #222222;
+            font-size: 14px;
+            color: #777777;
+        }
+
+        footer p {
+            margin-bottom: 10px;
+        }
+
+        /* 모바일 대응 반응형 레이아웃 */
+        @media (max-width: 900px) {
+            .card-col {
+                width: 100%;
+                float: none;
+                margin-bottom: 30px;
+            }
+            .feature-card {
+                height: auto;
+            }
+            header {
+                position: relative;
+                height: auto;
+                text-align: center;
+            }
+            .header-container {
+                display: block;
+                padding: 15px 20px;
+            }
+            .logo-text {
+                float: none;
+                margin-bottom: 10px;
+                display: block;
+            }
+            nav {
+                float: none;
+            }
+            nav ul li {
+                margin: 0 10px;
+            }
+            section {
+                padding: 60px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-container">
+            <div class="logo-text">MINECRAFT FAN</div>
+            <nav>
+                <ul>
+                    <li><a href="#about">게임 소개</a></li>
+                    <li><a href="#features">주요 특징</a></li>
+                    <li><a href="#updates">최신 업데이트</a></li>
+                    <li><a href="#specs">시스템 사양</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="hero">
+        <div class="slide-container">
+            <div class="slide active" style="background-image: url('마인크래프트2.png'), linear-gradient(to bottom, #2c3e50, #000000);"></div>
+            <div class="slide" style="background-image: url('마인크래프트3.png'), linear-gradient(to bottom, #111111, #4c4c4c);"></div>
+            <div class="slide" style="background-image: url('마인크래프트4.png'), linear-gradient(to bottom, #ffc0cb, #704850);"></div>
+            <div class="slide" style="background-image: url('마인크래프트5.png'), linear-gradient(to bottom, #1f4068, #162447);"></div>
+        </div>
+        <div class="hero-content">
+            <img src="마인크래프트.png" alt="Minecraft Logo" class="hero-logo" onerror="this.src='image_005a5b.png'; this.onerror=null;">
+            <div style="margin-top: 20px;">
+                <a href="https://www.minecraft.net" target="_blank" class="cta-btn">공식 홈페이지 방문하기</a>
+            </div>
+        </div>
+    </div>
+
+    <section id="about">
+        <div class="title-wrapper">
+            <div class="section-title">게임 소개</div>
+        </div>
+        <div class="about-box">
+            <p><strong>마인크래프트(Minecraft)</strong>는 네모난 블록으로 이루어진 거대한 세계를 자유롭게 탐험하며 자신만의 세상을 만들어 나가는 세계 대표 샌드박스 게임입니다.</p>
+            <p style="margin-bottom: 0;">정해진 목표 없이 유저의 상상력과 창의성에 따라 무한한 자유도를 보장하며, 채광, 건축, 서바이벌, 모험 등 다채로운 활동을 통해 초보자부터 숙련된 유저까지 누구나 몰입감 있는 플레이를 경험할 수 있습니다.</p>
+        </div>
+    </section>
+
+    <section id="features">
+        <div class="features-container">
+            <div class="title-wrapper">
+                <div class="section-title">주요 특징 및 모드</div>
+            </div>
+            <div class="card-row">
+                <div class="card-col">
+                    <div class="feature-card">
+                        <h3>서바이벌 모드</h3>
+                        <p>자원을 채집하고 도구를 제작하며 밤마다 습격해오는 위험한 몹들로부터 살아남아야 합니다. 허기와 생명력을 관리하며 엔더 드래곤을 처치하는 모험의 재미를 선사합니다.</p>
+                    </div>
+                </div>
+                <div class="card-col">
+                    <div class="feature-card">
+                        <h3>크리에이티브 모드</h3>
+                        <p>무한한 자원과 비행 능력이 주어집니다. 어떤 방해도 받지 않고 대규모 건축물이나 레드스톤 회로 장치, 상상 속에만 그리던 완벽한 도시를 마음껏 설계할 수 있습니다.</p>
+                    </div>
+                </div>
+                <div class="card-col">
+                    <div class="feature-card">
+                        <h3>멀티플레이 요소</h3>
+                        <p>전 세계 친구 및 유저들과 함께 서버에 접속하여 협동 건축을 즐기거나 미니게임, PvP 대전 등 다채로운 콘텐츠 속에서 함께 소통하며 플레이할 수 있습니다.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="updates">
+        <div class="title-wrapper">
+            <div class="section-title">최신 업데이트 소식</div>
+        </div>
+        <div class="update-banner">
+            <div class="update-tag">NEW DROP</div>
+            <h3>카오스 큐브 (Chaos Cubed) & 황황 동굴</h3>
+            <p>이번 최신 Drop 업데이트에서는 전례 없는 미지의 구역과 신비로운 블록들이 새롭게 추가되었습니다. 혼돈으로 가득 찬 공간 구조와 고유 생태계를 가진 '황황 동굴'에서 새로운 자원을 채굴하고 미스터리를 풀어보세요!</p>
+            <div class="sub-updates">
+                <h4>주요 변경점</h4>
+                <p style="font-size: 14px; color: #b0b0b0; margin-bottom: 0;">• 신규 지형: 황황 동굴 바이옴 및 유적 생성이 강화되었습니다.<br>• 신규 아이템: 혼돈의 속성을 담고 있는 카오스 큐브 블록 계열 추가.<br>• 시스템 안정성 및 렌더링 최적화 작업이 병행되었습니다.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="specs">
+        <div class="specs-container">
+            <div class="title-wrapper">
+                <div class="section-title">PC 시스템 사양 (Java Edition)</div>
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>구분</th>
+                            <th>최소 사양</th>
+                            <th>권장 사양</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>CPU</strong></td>
+                            <td>Intel Core i3-3210 / AMD A8-7600 또는 동급</td>
+                            <td>Intel Core i5-4690 / AMD A10-7800 또는 동급</td>
+                        </tr>
+                        <tr>
+                            <td><strong>RAM</strong></td>
+                            <td>4 GB RAM</td>
+                            <td>8 GB RAM</td>
+                        </tr>
+                        <tr>
+                            <td><strong>GPU (그래픽)</strong></td>
+                            <td>Intel HD Graphics 4000 / AMD Radeon R5 시리즈</td>
+                            <td>NVIDIA GeForce 700 시리즈 / AMD Radeon Rx 200 시리즈</td>
+                        </tr>
+                        <tr>
+                            <td><strong>OS (운영체제)</strong></td>
+                            <td>Windows 7 이상 (64비트)</td>
+                            <td>Windows 10 이상 (64비트)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>저장공간</td></strong>
+                            <td>최소 4 GB (SSD 권장)</td>
+                            <td>4 GB 이상 고속 SSD</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2026 Minecraft Fan Page. Created for fans and updates.</p>
+        <p style="font-size: 12px; color: #555555;">본 페이지는 팬 메이드 사이트이며, Mojang Studios 및 Microsoft와 공식적으로 연관되어 있지 않습니다.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var slides = document.querySelectorAll('.slide');
+            var currentSlide = 0;
+            var slideInterval = setInterval(nextSlide, 4000); // 4초마다 실행
+
+            function nextSlide() {
+                slides[currentSlide].classList.remove('active');
+                currentSlide = (currentSlide + 1) % slides.length;
+                slides[currentSlide].classList.add('active');
+            }
+        });
+    </script>
+</body>
+</html>
