@@ -1,252 +1,599 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <link rel="icon" type="image/svg+xml" href="https://file-refinement-for-3j50.bolt.host/vite.svg">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-default="">Vite + React + TS</title>
-    <meta property="og:image" content="https://bolt.new/static/og_default.png">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content="https://bolt.new/static/og_default.png">
-    <script type="module" crossorigin="" src="./Vite + React + TS_files/index-CCp4qhu6.js.다운로드"></script>
-    <link rel="stylesheet" crossorigin="" href="./Vite + React + TS_files/index-ZCaacvqy.css">
-    <script async="" src="./Vite + React + TS_files/badge.js.다운로드"></script> 
+    <title>마인크래프트 유저 소개 및 팬 페이지</title>
+    <style>
+        /* 기본 초기화 및 폰트 설정 */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #121212;
+            color: #e0e0e0;
+            line-height: 1.6;
+        }
+
+        a {
+            text-shadow: none;
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* 네비게이션 헤더 (상단 고정) */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 70px;
+            background-color: #1f1f1f;
+            border-bottom: 3px solid #4CAF50;
+            z-index: 1000;
+            display: table;
+        }
+
+        .header-container {
+            display: table-cell;
+            vertical-align: middle;
+            padding: 0 40px;
+        }
+
+        .logo-text {
+            float: left;
+            font-size: 20px;
+            font-weight: bold;
+            color: #4CAF50;
+            line-height: 40px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        nav {
+            float: right;
+        }
+
+        nav ul {
+            list-style: none;
+        }
+
+        nav ul li {
+            display: inline-block;
+            margin-left: 30px;
+            line-height: 40px;
+        }
+
+        nav ul li a {
+            font-size: 15px;
+            font-weight: 500;
+            color: #ffffff;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: #4CAF50;
+        }
+
+        /* 히어로 섹션 */
+        .hero {
+            position: relative;
+            height: 100vh;
+            min-height: 600px;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        /* 슬라이드 배경 */
+        .slide-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+        }
+
+        .slide.active {
+            opacity: 1;
+        }
+
+        /* 오버레이 어둡게 처리 */
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.55);
+            z-index: 2;
+        }
+
+        /* 히어로 콘텐츠 */
+        .hero-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 3;
+            width: 90%;
+            max-width: 1200px;
+        }
+
+        .hero-logo {
+            width: 100%;
+            max-width: 900px;
+            height: auto;
+            margin-bottom: 30px;
+            filter: drop-shadow(0px 8px 16px rgba(0,0,0,0.8));
+        }
+
+        .cta-btn {
+            display: inline-block;
+            padding: 16px 40px;
+            background-color: #4CAF50;
+            color: #ffffff;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            border-bottom: 4px solid #388E3C;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.2s;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+        }
+
+        .cta-btn:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+        }
+
+        .cta-btn:active {
+            transform: translateY(1px);
+            border-bottom: 2px solid #388E3C;
+        }
+
+        /* 공통 섹션 스타일 */
+        section {
+            padding: 100px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 28px;
+            color: #ffffff;
+            margin-bottom: 40px;
+            text-align: center;
+            border-left: 5px solid #4CAF50;
+            padding-left: 15px;
+            display: inline-block;
+        }
+
+        .title-wrapper {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        /* Section 1: 게임 소개 */
+        #about {
+            background-color: #121212;
+        }
+
+        .about-box {
+            background-color: #1f1f1f;
+            border-radius: 8px;
+            padding: 40px;
+            border: 1px solid #2d2d2d;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .about-box p {
+            font-size: 17px;
+            margin-bottom: 20px;
+            color: #cccccc;
+            text-align: center;
+        }
+
+        /* Section 2: 주요 특징 (반응형 카드 그리드) */
+        #features {
+            background-color: #1a1a1a;
+            max-width: 100%;
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+        .features-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: block;
+        }
+
+        .card-row {
+            margin: 0 -15px;
+        }
+
+        .card-row::after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        .card-col {
+            float: left;
+            width: 33.333%;
+            padding: 0 15px;
+        }
+
+        .feature-card {
+            background-color: #242424;
+            border-radius: 8px;
+            padding: 40px 30px;
+            text-align: center;
+            border-top: 4px solid #4CAF50;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            height: 320px;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 30px rgba(76, 175, 80, 0.2);
+        }
+
+        .feature-card h3 {
+            font-size: 22px;
+            color: #ffffff;
+            margin-bottom: 15px;
+        }
+
+        .feature-card p {
+            font-size: 15px;
+            color: #aaaaaa;
+        }
+
+        /* Section 3: 최신 업데이트 소식 (강조 띠 형태) */
+        #updates {
+            background-color: #121212;
+        }
+
+        .update-banner {
+            background: linear-gradient(135deg, #1e3c1f 0%, #0d2410 100%);
+            border-left: 6px solid #4CAF50;
+            border-radius: 8px;
+            padding: 40px;
+            box-shadow: 0 6px 25px rgba(0,0,0,0.4);
+        }
+
+        .update-tag {
+            display: inline-block;
+            background-color: #4CAF50;
+            color: #ffffff;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 4px 10px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .update-banner h3 {
+            font-size: 26px;
+            color: #ffffff;
+            margin-bottom: 15px;
+        }
+
+        .update-banner p {
+            font-size: 16px;
+            color: #dddddd;
+            margin-bottom: 25px;
+        }
+
+        .sub-updates {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 20px;
+            margin-top: 20px;
+        }
+
+        .sub-updates h4 {
+            color: #4CAF50;
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        /* Section 4: 시스템 사양 */
+        #specs {
+            background-color: #1a1a1a;
+            max-width: 100%;
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+        .specs-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #222222;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 18px 24px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #2e2e2e;
+            color: #4CAF50;
+            font-size: 16px;
+            font-weight: bold;
+            border-bottom: 3px solid #4CAF50;
+        }
+
+        td {
+            border-bottom: 1px solid #333333;
+            font-size: 15px;
+            color: #dddddd;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background-color: #2a2a2a;
+        }
+
+        /* 푸터 */
+        footer {
+            background-color: #111111;
+            padding: 40px 20px;
+            text-align: center;
+            border-top: 1px solid #222222;
+            font-size: 14px;
+            color: #777777;
+        }
+
+        footer p {
+            margin-bottom: 10px;
+        }
+
+        /* 모바일 대응 반응형 레이아웃 */
+        @media (max-width: 900px) {
+            .card-col {
+                width: 100%;
+                float: none;
+                margin-bottom: 30px;
+            }
+            .feature-card {
+                height: auto;
+            }
+            header {
+                position: relative;
+                height: auto;
+                text-align: center;
+            }
+            .header-container {
+                display: block;
+                padding: 15px 20px;
+            }
+            .logo-text {
+                float: none;
+                margin-bottom: 10px;
+                display: block;
+            }
+            nav {
+                float: none;
+            }
+            nav ul li {
+                margin: 0 10px;
+            }
+            section {
+                padding: 60px 20px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div id="root">
-        <div class="min-h-screen bg-neutral-950 text-white antialiased selection:bg-emerald-500/30">
-            <header class="fixed top-0 left-0 w-full z-50 transition-all duration-300 bg-transparent border-b-2 border-transparent">
-                <div class="max-w-7xl mx-auto px-6 lg:px-10 h-16 flex items-center justify-between">
-                    <a href="https://file-refinement-for-3j50.bolt.host/#" class="flex items-center gap-2 group">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-boxes w-7 h-7 text-emerald-500 group-hover:rotate-12 transition-transform duration-300">
-                            <path d="M2.97 12.92A2 2 0 0 0 2 14.63v3.24a2 2 0 0 0 .97 1.71l3 1.8a2 2 0 0 0 2.06 0L12 19v-5.5l-5-3-4.03 2.42Z"></path>
-                            <path d="m7 16.5-4.74-2.85"></path>
-                            <path d="m7 16.5 5-3"></path>
-                            <path d="M7 16.5v5.17"></path>
-                            <path d="M12 13.5V19l3.97 2.38a2 2 0 0 0 2.06 0l3-1.8a2 2 0 0 0 .97-1.71v-3.24a2 2 0 0 0-.97-1.71L17 10.5l-5 3Z"></path>
-                            <path d="m17 16.5-5-3"></path>
-                            <path d="m17 16.5 4.74-2.85"></path>
-                            <path d="M17 16.5v5.17"></path>
-                            <path d="M7.97 4.42A2 2 0 0 0 7 6.13v4.37l5 3 5-3V6.13a2 2 0 0 0-.97-1.71l-3-1.8a2 2 0 0 0-2.06 0l-3 1.8Z"></path>
-                            <path d="M12 8 7.26 5.15"></path>
-                            <path d="m12 8 4.74-2.85"></path>
-                            <path d="M12 13.5V8"></path>
-                        </svg>
-                        <span class="text-lg font-bold text-emerald-400 tracking-wider uppercase">Minecraft Fan</span>
-                    </a>
-                    <nav class="hidden md:flex items-center gap-8">
-                        <a href="https://file-refinement-for-3j50.bolt.host/#about" class="text-sm font-medium text-neutral-200 hover:text-emerald-400 transition-colors duration-200 relative group">게임 소개<span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-emerald-500 group-hover:w-full transition-all duration-300"></span></a>
-                        <a href="https://file-refinement-for-3j50.bolt.host/#features" class="text-sm font-medium text-neutral-200 hover:text-emerald-400 transition-colors duration-200 relative group">주요 특징<span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-emerald-500 group-hover:w-full transition-all duration-300"></span></a>
-                        <a href="https://file-refinement-for-3j50.bolt.host/#updates" class="text-sm font-medium text-neutral-200 hover:text-emerald-400 transition-colors duration-200 relative group">최신 업데이트<span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-emerald-500 group-hover:w-full transition-all duration-300"></span></a>
-                        <a href="https://file-refinement-for-3j50.bolt.host/#specs" class="text-sm font-medium text-neutral-200 hover:text-emerald-400 transition-colors duration-200 relative group">시스템 사양<span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-emerald-500 group-hover:w-full transition-all duration-300"></span></a>
-                    </nav>
-                    <button class="md:hidden text-neutral-200" aria-label="메뉴 열기">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-menu w-6 h-6"><line x1="4" x2="20" y1="12" y2="12"></line><line x1="4" x2="20" y1="6" y2="6"></line><line x1="4" x2="20" y1="18" y2="18"></line></svg>
-                    </button>
-                </div>
-                <div class="md:hidden overflow-hidden transition-all duration-300 bg-neutral-900/98 backdrop-blur-md max-h-0">
-                    <nav class="flex flex-col px-6 py-4 gap-1">
-                        <a href="https://file-refinement-for-3j50.bolt.host/#about" class="py-3 text-sm font-medium text-neutral-200 hover:text-emerald-400 transition-colors border-b border-neutral-800 last:border-0">게임 소개</a>
-                        <a href="https://file-refinement-for-3j50.bolt.host/#features" class="py-3 text-sm font-medium text-neutral-200 hover:text-emerald-400 transition-colors border-b border-neutral-800 last:border-0">주요 특징</a>
-                        <a href="https://file-refinement-for-3j50.bolt.host/#updates" class="py-3 text-sm font-medium text-neutral-200 hover:text-emerald-400 transition-colors border-b border-neutral-800 last:border-0">최신 업데이트</a>
-                        <a href="https://file-refinement-for-3j50.bolt.host/#specs" class="py-3 text-sm font-medium text-neutral-200 hover:text-emerald-400 transition-colors border-b border-neutral-800 last:border-0">시스템 사양</a>
-                    </nav>
-                </div>
-            </header>
 
-            <main>
-                <section class="relative h-screen min-h-[600px] overflow-hidden">
-                    <div class="absolute inset-0 z-0 bg-neutral-900">
-                        <img src="./Vite + React + TS_files/SSI_20220419180936_O2.jpg" alt="" referrerpolicy="no-referrer" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-[1500ms] ease-in-out opacity-100">
-                        <img src="./Vite + React + TS_files/209965_214548_5458.jpg" alt="" referrerpolicy="no-referrer" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-[1500ms] ease-in-out opacity-0">
-                    </div>
-                    <div class="absolute inset-0 z-10 bg-gradient-to-b from-black/70 via-black/50 to-black/80"></div>
-                    <div class="relative z-20 h-full flex flex-col items-center justify-center px-6 text-center">
-                        <h1 class="text-5xl sm:text-7xl lg:text-8xl font-extrabold text-white tracking-tight drop-shadow-2xl animate-fade-in-up">MINECRAFT</h1>
-                        <p class="mt-4 text-lg sm:text-xl text-emerald-300 font-semibold tracking-wide uppercase drop-shadow-lg animate-fade-in-up-delayed">Fan Community &amp; Update Hub</p>
-                        <p class="mt-6 max-w-2xl text-base sm:text-lg text-neutral-200 leading-relaxed animate-fade-in-up-delayed">네모난 블록으로 이루어진 거대한 세계를 자유롭게 탐험하며 자신만의 세상을 만들어 나가는 세계 대표 샌드박스 게임을 지금 만나보세요.</p>
-                        <a href="https://www.minecraft.net/" target="_blank" rel="noopener noreferrer" class="mt-10 inline-flex items-center gap-2 px-8 py-4 bg-emerald-500 text-white text-lg font-bold rounded-lg shadow-lg shadow-emerald-500/40 hover:bg-emerald-400 hover:-translate-y-0.5 active:translate-y-0.5 transition-all duration-200">공식 홈페이지 방문하기
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-external-link w-5 h-5"><path d="M15 3h6v6"></path><path d="M10 14 21 3"></path><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path></svg>
-                        </a>
-                    </div>
-                    <a href="https://file-refinement-for-3j50.bolt.host/#about" class="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 text-white/70 hover:text-white transition-colors animate-bounce" aria-label="아래로 스크롤">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down w-8 h-8"><path d="m6 9 6 6 6-6"></path></svg>
-                    </a>
-                </section>
+    <!-- 헤더 & 네비게이션 -->
+    <header>
+        <div class="header-container">
+            <div class="logo-text">MINECRAFT FAN</div>
+            <nav>
+                <ul>
+                    <li><a href="#about">게임 소개</a></li>
+                    <li><a href="#features">주요 특징</a></li>
+                    <li><a href="#updates">최신 업데이트</a></li>
+                    <li><a href="#specs">시스템 사양</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
 
-                <section id="about" class="py-24 px-6 max-w-6xl mx-auto">
-                    <div class="text-center mb-12">
-                        <div class="inline-flex items-center gap-2 text-emerald-400 mb-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open w-5 h-5"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
-                            <span class="text-sm font-semibold uppercase tracking-wider">About</span>
-                        </div>
-                        <h2 class="text-3xl sm:text-4xl font-bold text-white">게임 소개</h2>
-                    </div>
-                    <div class="bg-neutral-900 rounded-2xl p-8 sm:p-12 border border-neutral-800 shadow-xl shadow-black/30">
-                        <p class="text-lg text-neutral-300 leading-relaxed text-center mb-6"><strong class="text-emerald-400">마인크래프트(Minecraft)</strong>는 네모난 블록으로 이루어진 거대한 세계를 자유롭게 탐험하며 자신만의 세상을 만들어 나가는 세계 대표 샌드박스 게임입니다.</p>
-                        <p class="text-base text-neutral-400 leading-relaxed text-center">정해진 목표 없이 유저의 상상력과 창의성에 따라 무한한 자유도를 보장하며, 채광, 건축, 서바이벌, 모험 등 다채로운 활동을 통해 초보자부터 숙련된 유저까지 누구나 몰입감 있는 플레이를 경험할 수 있습니다.</p>
-                    </div>
-                </section>
-
-                <section id="features" class="py-24 bg-neutral-950/50">
-                    <div class="max-w-6xl mx-auto px-6">
-                        <div class="text-center mb-12">
-                            <div class="inline-flex items-center gap-2 text-emerald-400 mb-3">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sparkles w-5 h-5"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"></path><path d="M5 3v4"></path><path d="M19 17v4"></path><path d="M3 5h4"></path><path d="M17 19h4"></path></svg>
-                                <span class="text-sm font-semibold uppercase tracking-wider">Features</span>
-                            </div>
-                            <h2 class="text-3xl sm:text-4xl font-bold text-white">주요 특징 및 모드</h2>
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            <div class="group bg-neutral-900 rounded-2xl border border-neutral-800 overflow-hidden shadow-lg shadow-black/30 hover:shadow-emerald-500/20 hover:-translate-y-2 transition-all duration-300 flex flex-col">
-                                <div class="relative h-44 overflow-hidden bg-neutral-800">
-                                    <img src="./Vite + React + TS_files/4d6d83a8f68cb27f3667bfd1a9a3643c.png" alt="" referrerpolicy="no-referrer" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out opacity-0">
-                                    <img src="./Vite + React + TS_files/36yr-old-11-36hr-into-my-first-ever-survival-mode-java-game-v0-c8ygt7fqarvd1.jpeg" alt="" referrerpolicy="no-referrer" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out opacity-100">
-                                    <div class="absolute inset-0 bg-gradient-to-t from-neutral-900 via-neutral-900/20 to-transparent"></div>
-                                    <div class="absolute top-4 left-4 w-11 h-11 flex items-center justify-center bg-emerald-500 rounded-xl shadow-lg shadow-emerald-500/30 group-hover:scale-110 transition-transform duration-300">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-swords w-6 h-6 text-white"><polyline points="14.5 17.5 3 6 3 3 6 3 17.5 14.5"></polyline><line x1="13" x2="19" y1="19" y2="13"></line><line x1="16" x2="20" y1="16" y2="20"></line><line x1="19" x2="21" y1="21" y2="19"></line><polyline points="14.5 6.5 18 3 21 3 21 6 17.5 9.5"></polyline><line x1="5" x2="9" y1="14" y2="18"></line><line x1="7" x2="4" y1="17" y2="20"></line><line x1="3" x2="5" y1="19" y2="21"></line></svg>
-                                    </div>
-                                </div>
-                                <div class="p-6 flex flex-col flex-grow">
-                                    <h3 class="text-xl font-bold text-white mb-3 group-hover:text-emerald-400 transition-colors">서바이벌 모드</h3>
-                                    <p class="text-sm text-neutral-400 leading-relaxed flex-grow">자원을 채집하고 도구를 제작하며 밤마다 습격해오는 위험한 몹들로부터 살아남아야 합니다. 허기와 생명력을 관리하며 엔더 드래곤을 처치하는 모험의 재미를 선사합니다.</p>
-                                </div>
-                            </div>
-                            <div class="group bg-neutral-900 rounded-2xl border border-neutral-800 overflow-hidden shadow-lg shadow-black/30 hover:shadow-emerald-500/20 hover:-translate-y-2 transition-all duration-300 flex flex-col">
-                                <div class="relative h-44 overflow-hidden bg-neutral-800">
-                                    <img src="./Vite + React + TS_files/20160204_180525.png" alt="" referrerpolicy="no-referrer" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out opacity-0">
-                                    <img src="./Vite + React + TS_files/been-practicing-some-build-in-creative-mode-what-do-you-v0-iva29kvqh9mb1.png" alt="" referrerpolicy="no-referrer" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out opacity-100">
-                                    <div class="absolute inset-0 bg-gradient-to-t from-neutral-900 via-neutral-900/20 to-transparent"></div>
-                                    <div class="absolute top-4 left-4 w-11 h-11 flex items-center justify-center bg-emerald-500 rounded-xl shadow-lg shadow-emerald-500/30 group-hover:scale-110 transition-transform duration-300">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-hammer w-6 h-6 text-white"><path d="m15 12-8.373 8.373a1 1 0 1 1-3-3L12 9"></path><path d="m18 15 4-4"></path><path d="m21.5 11.5-1.914-1.914A2 2 0 0 1 19 8.172V7l-2.26-2.26a6 6 0 0 0-4.202-1.756L9 2.96l.92.82A6.18 6.18 0 0 1 12 8.4V10l2 2h1.172a2 2 0 0 1 1.414.586L18.5 14.5"></path></svg>
-                                    </div>
-                                </div>
-                                <div class="p-6 flex flex-col flex-grow">
-                                    <h3 class="text-xl font-bold text-white mb-3 group-hover:text-emerald-400 transition-colors">크리에이티브 모드</h3>
-                                    <p class="text-sm text-neutral-400 leading-relaxed flex-grow">무한한 자원과 비행 능력이 주어집니다. 어떤 방해도 받지 않고 대규모 건축물이나 레드스톤 회로 장치, 상상 속에만 그리던 완벽한 도시를 마음껏 설계할 수 있습니다.</p>
-                                </div>
-                            </div>
-                            <div class="group bg-neutral-900 rounded-2xl border border-neutral-800 overflow-hidden shadow-lg shadow-black/30 hover:shadow-emerald-500/20 hover:-translate-y-2 transition-all duration-300 flex flex-col">
-                                <div class="relative h-44 overflow-hidden bg-neutral-800">
-                                    <img src="./Vite + React + TS_files/img.jpg" alt="" referrerpolicy="no-referrer" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out opacity-0">
-                                    <img src="./Vite + React + TS_files/2026051411083871198_l.jpeg" alt="" referrerpolicy="no-referrer" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out opacity-100">
-                                    <div class="absolute inset-0 bg-gradient-to-t from-neutral-900 via-neutral-900/20 to-transparent"></div>
-                                    <div class="absolute top-4 left-4 w-11 h-11 flex items-center justify-center bg-emerald-500 rounded-xl shadow-lg shadow-emerald-500/30 group-hover:scale-110 transition-transform duration-300">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-users w-6 h-6 text-white"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-                                    </div>
-                                </div>
-                                <div class="p-6 flex flex-col flex-grow">
-                                    <h3 class="text-xl font-bold text-white mb-3 group-hover:text-emerald-400 transition-colors">멀티플레이 요소</h3>
-                                    <p class="text-sm text-neutral-400 leading-relaxed flex-grow">전 세계 친구 및 유저들과 함께 서버에 접속하여 협동 건축을 즐기거나 미니게임, PvP 대전 등 다채로운 콘텐츠 속에서 함께 소통하며 플레이할 수 있습니다.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <section id="updates" class="py-24 px-6 max-w-6xl mx-auto">
-                    <div class="text-center mb-12">
-                        <div class="inline-flex items-center gap-2 text-emerald-400 mb-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-newspaper w-5 h-5"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"></path><path d="M18 14h-8"></path><path d="M15 18h-5"></path><path d="M10 6h8v4h-8V6Z"></path></svg>
-                            <span class="text-sm font-semibold uppercase tracking-wider">Updates</span>
-                        </div>
-                        <h2 class="text-3xl sm:text-4xl font-bold text-white">최신 업데이트 소식</h2>
-                    </div>
-                    <div class="relative bg-gradient-to-br from-emerald-950 via-neutral-900 to-neutral-900 rounded-2xl p-8 sm:p-12 border-l-4 border-emerald-500 shadow-xl shadow-black/40 overflow-hidden">
-                        <div class="absolute -top-20 -right-20 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl"></div>
-                        <div class="relative">
-                            <span class="inline-block bg-emerald-500 text-white text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-md mb-5">New Drop</span>
-                            <h3 class="text-2xl sm:text-3xl font-bold text-white mb-4">카오스 큐브 (Chaos Cubed) &amp; 황황 동굴</h3>
-                            <p class="text-base text-neutral-300 leading-relaxed mb-8 max-w-3xl">이번 최신 Drop 업데이트에서는 전례 없는 미지의 구역과 신비로운 블록들이 새롭게 추가되었습니다. 혼돈으로 가득 찬 공간 구조와 고유 생태계를 가진 '황황 동굴'에서 새로운 자원을 채굴하고 미스터리를 풀어보세요!</p>
-                            <div class="border-t border-white/10 pt-6">
-                                <h4 class="text-emerald-400 font-bold text-lg mb-4">주요 변경점</h4>
-                                <ul class="space-y-3">
-                                    <li class="flex items-start gap-3 text-sm text-neutral-300">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5"><path d="M20 6 9 17l-5-5"></path></svg>
-                                        <span>신규 지형: 황황 동굴 바이옴 및 유적 생성이 강화되었습니다.</span>
-                                    </li>
-                                    <li class="flex items-start gap-3 text-sm text-neutral-300">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5"><path d="M20 6 9 17l-5-5"></path></svg>
-                                        <span>신규 아이템: 혼돈의 속성을 담고 있는 카오스 큐브 블록 계열 추가.</span>
-                                    </li>
-                                    <li class="flex items-start gap-3 text-sm text-neutral-300">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5"><path d="M20 6 9 17l-5-5"></path></svg>
-                                        <span>시스템 안정성 및 렌더링 최적화 작업이 병행되었습니다.</span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <section id="specs" class="py-24 bg-neutral-950/50">
-                    <div class="max-w-6xl mx-auto px-6">
-                        <div class="text-center mb-12">
-                            <div class="inline-flex items-center gap-2 text-emerald-400 mb-3">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-monitor w-5 h-5"><rect width="20" height="14" x="2" y="3" rx="2"></rect><line x1="8" x2="16" y1="21" y2="21"></line><line x1="12" x2="12" y1="17" y2="21"></line></svg>
-                                <span class="text-sm font-semibold uppercase tracking-wider">System Requirements</span>
-                            </div>
-                            <h2 class="text-3xl sm:text-4xl font-bold text-white">PC 시스템 사양 (Java Edition)</h2>
-                        </div>
-                        <div class="overflow-x-auto rounded-2xl border border-neutral-800 shadow-xl shadow-black/30">
-                            <table class="w-full text-left">
-                                <thead>
-                                    <tr class="bg-neutral-800/80 border-b-2 border-emerald-500">
-                                        <th class="px-6 py-4 text-emerald-400 font-bold text-base">구분</th>
-                                        <th class="px-6 py-4 text-emerald-400 font-bold text-base">최소 사양</th>
-                                        <th class="px-6 py-4 text-emerald-400 font-bold text-base">권장 사양</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr class="border-b border-neutral-800 last:border-0 hover:bg-neutral-800/40 transition-colors bg-neutral-900">
-                                        <td class="px-6 py-4 font-semibold text-white whitespace-nowrap">CPU</td>
-                                        <td class="px-6 py-4 text-neutral-300 text-sm">Intel Core i3-3210 / AMD A8-7600 또는 동급</td>
-                                        <td class="px-6 py-4 text-neutral-300 text-sm"><span class="flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check w-4 h-4 text-emerald-500 flex-shrink-0"><path d="M20 6 9 17l-5-5"></path></svg>Intel Core i5-4690 / AMD A10-7800 또는 동급</span></td>
-                                    </tr>
-                                    <tr class="border-b border-neutral-800 last:border-0 hover:bg-neutral-800/40 transition-colors bg-neutral-900/60">
-                                        <td class="px-6 py-4 font-semibold text-white whitespace-nowrap">RAM</td>
-                                        <td class="px-6 py-4 text-neutral-300 text-sm">4 GB RAM</td>
-                                        <td class="px-6 py-4 text-neutral-300 text-sm"><span class="flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check w-4 h-4 text-emerald-500 flex-shrink-0"><path d="M20 6 9 17l-5-5"></path></svg>8 GB RAM</span></td>
-                                    </tr>
-                                    <tr class="border-b border-neutral-800 last:border-0 hover:bg-neutral-800/40 transition-colors bg-neutral-900">
-                                        <td class="px-6 py-4 font-semibold text-white whitespace-nowrap">GPU (그래픽)</td>
-                                        <td class="px-6 py-4 text-neutral-300 text-sm">Intel HD Graphics 4000 / AMD Radeon R5 시리즈</td>
-                                        <td class="px-6 py-4 text-neutral-300 text-sm"><span class="flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check w-4 h-4 text-emerald-500 flex-shrink-0"><path d="M20 6 9 17l-5-5"></path></svg>NVIDIA GeForce 700 시리즈 / AMD Radeon Rx 200 시리즈</span></td>
-                                    </tr>
-                                    <tr class="border-b border-neutral-800 last:border-0 hover:bg-neutral-800/40 transition-colors bg-neutral-900/60">
-                                        <td class="px-6 py-4 font-semibold text-white whitespace-nowrap">OS (운영체제)</td>
-                                        <td class="px-6 py-4 text-neutral-300 text-sm">Windows 7 이상 (64비트)</td>
-                                        <td class="px-6 py-4 text-neutral-300 text-sm"><span class="flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check w-4 h-4 text-emerald-500 flex-shrink-0"><path d="M20 6 9 17l-5-5"></path></svg>Windows 10 이상 (64비트)</span></td>
-                                    </tr>
-                                    <tr class="border-b border-neutral-800 last:border-0 hover:bg-neutral-800/40 transition-colors bg-neutral-900">
-                                        <td class="px-6 py-4 font-semibold text-white whitespace-nowrap">저장공간</td>
-                                        <td class="px-6 py-4 text-neutral-300 text-sm">최소 4 GB (SSD 권장)</td>
-                                        <td class="px-6 py-4 text-neutral-300 text-sm"><span class="flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check w-4 h-4 text-emerald-500 flex-shrink-0"><path d="M20 6 9 17l-5-5"></path></svg>4 GB 이상 고속 SSD</span></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </section>
-            </main>
-
-            <footer class="bg-neutral-950 border-t border-neutral-800 py-10 px-6 text-center">
-                <div class="flex items-center justify-center gap-2 mb-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-boxes w-5 h-5 text-emerald-500"><path d="M2.97 12.92A2 2 0 0 0 2 14.63v3.24a2 2 0 0 0 .97 1.71l3 1.8a2 2 0 0 0 2.06 0L12 19v-5.5l-5-3-4.03 2.42Z"></path><path d="m7 16.5-4.74-2.85"></path><path d="m7 16.5 5-3"></path><path d="M7 16.5v5.17"></path><path d="M12 13.5V19l3.97 2.38a2 2 0 0 0 2.06 0l3-1.8a2 2 0 0 0 .97-1.71v-3.24a2 2 0 0 0-.97-1.71L17 10.5l-5 3Z"></path><path d="m17 16.5-5-3"></path><path d="m17 16.5 4.74-2.85"></path><path d="M17 16.5v5.17"></path><path d="M7.97 4.42A2 2 0 0 0 7 6.13v4.37l5 3 5-3V6.13a2 2 0 0 0-.97-1.71l-3-1.8a2 2 0 0 0-2.06 0l-3 1.8Z"></path><path d="M12 8 7.26 5.15"></path><path d="m12 8 4.74-2.85"></path><path d="M12 13.5V8"></path></svg>
-                    <span class="text-sm font-bold text-emerald-400 uppercase tracking-wider">Minecraft Fan</span>
-                </div>
-                <p class="text-sm text-neutral-500 mb-2">© 2026 Minecraft Fan Page. Created for fans and updates.</p>
-                <p class="text-xs text-neutral-600">본 페이지는 팬 메이드 사이트이며, Mojang Studios 및 Microsoft와 공식적으로 연관되어 있지 않습니다.</p>
-            </footer>
+    <!-- 히어로 섹션 -->
+    <div class="hero">
+        <div class="slide-container">
+            <!-- 기획 리스트 기반 동일 경로 이미지 로드 (대체 텍스트 백업 포함) -->
+            <div class="slide active" style="background-image: url('마인크래프트2.png'), linear-gradient(to bottom, #2c3e50, #000000);"></div>
+            <div class="slide" style="background-image: url('마인크래프트3.png'), linear-gradient(to bottom, #111111, #4c4c4c);"></div>
+            <div class="slide" style="background-image: url('마인크래프트4.png'), linear-gradient(to bottom, #ffc0cb, #704850);"></div>
+            <div class="slide" style="background-image: url('마인크래프트5.png'), linear-gradient(to bottom, #1f4068, #162447);"></div>
+        </div>
+        <div class="hero-content">
+            <!-- 메인 로고 에셋 (우선순위 이미지 적용) -->
+            <img src="마인크래프트.png" alt="Minecraft Logo" class="hero-logo" onerror="this.src='image_005a5b.png'; this.onerror=null;">
+            <div style="margin-top: 20px;">
+                <a href="https://www.minecraft.net" target="_blank" class="cta-btn">공식 홈페이지 방문하기</a>
+            </div>
         </div>
     </div>
 
-    <style>
-        @font-face {
-            font-family: Inter-NjBkMDQwOTZj; 
-            font-weight: 600; 
-            src: url(data:font/woff2;base64,d09GMgABAAAAAB/gAA0AAAAAS/wAAB+KAAQAQgAAAAAAAAAAAAAAAAAAAAAAAAAAGlgbuVocjFoGYACBBgrDCLR9ATYCJAOECAuCBgAEIAWCdAcgGwRDs6Kky74VUZQqymnJ/yFBGyNE+x2UThQLJ0EUFxcnsiIS+RY/6jA8sJ6e26vp92f3gxWXNpT9Q8N3OwIUji/HcBDakeVyhMY+yeV5vuW7O7ObWsrxifvgMRJNF7Y07eIwPk+jnJJmbQew4FJKKTA4BQqQ01xSRBcoRwhPJhiCbXYgFtgg6uZrr7Fy0wYsjNoMwMLEZoKBkWiDOhsUdWWs1E3sudLpOxZtrMpYhTz/39iz3/fOzHuIlkIohMoiFLKIte6JkgiFrpLlm5z9n8ukdcmxJlJ3QwmsAD+MUU31fSH8sKyoAP4PdeadYwfupOAwd9xsfgCuZS3+pBjl1yJNgCvwBBQoTC0IbK6ADy4iSUL+4LmlzfTAB5aiVdP6ylRtf/l4BGaIyh2GA6dKRekQQuXK06fqcMcj//4eBB6ACYAAkzIIpacjJAckic8kZTjkUEkZUIpOIZbqHLtYtnIlu2zdyUXZuLfNIemB2jWRZI6nlimPuYHWMx2/BH8ECRIkSBApdvljreK0gDAHHCpd/8+oYEwAnjBaJAvJU4c0aEQ6dSE9epGwMDJuAlmwgCxZRggDg2AQgQL6NQvhjxwddMNydk9ZQu5FZXoRudfGN1eQiweyraB8SqhXzysrMMVlx4OKAK35yiuVTFpRGAMRPAS6n3Kt9xbXlMU3a9rph4UssBEb7O+vKQvW7DvGsDFXQZjUqdesRat2NoOGuI0KmrGOBPMTrzkf2OUD32CN/i8AMRo+igYTJGGG0hZJvAmqNbGGKGxQF4xZRFujdVin0kF2iMAW7PTYDHInJeJEwdBME2mYqXw1Rz8zZCVXQWcIHtony0y8JEnLJty8HObgZp/g0oWGsm+bm0c4YvKMiGATv/BgFwUSS08RZXsNFh11zhmUNccofNvCnM1fMx9tormHcvxAfXfvpD3M5DqTppavnU7drTXYh5XBCOLEVSAsgS8zeH7p2DUwfuqdHtuSbBycaYdyVg9ePkWKzKsgvvKzJmFtF+9YAO+vbhKbHn0GDbFz8vCSBQSFjZs0Y84ixY4IUsfGgBHpmADjdAz0NLSv1SoCRKmIauDGFOCb1gMYAlNgBDAh3phRSOVjjCXDrh5PFy2jRFH0oE+8WNALel6dAhBpxIC3T4ALV8Tj3UB/uCkYnP0SiLOMSIOmgFcLez8+tuo0vdNe71v8bi14GZZZn5c4ZdEdy14g/LUNo/+XGEQCojA/DClVWXbEinB4KhpaOnoGRiZm0URx4iVIlMQijVWefKX... [이하 생략] ...);
-        }
-    </style>
+    <!-- Section 1: 게임 소개 -->
+    <section id="about">
+        <div class="title-wrapper">
+            <div class="section-title">게임 소개</div>
+        </div>
+        <div class="about-box">
+            <p><strong>마인크래프트(Minecraft)</strong>는 네모난 블록으로 이루어진 거대한 세계를 자유롭게 탐험하며 자신만의 세상을 만들어 나가는 세계 대표 샌드박스 게임입니다.</p>
+            <p style="margin-bottom: 0;">정해진 목표 없이 유저의 상상력과 창의성에 따라 무한한 자유도를 보장하며, 채광, 건축, 서바이벌, 모험 등 다채로운 활동을 통해 초보자부터 숙련된 유저까지 누구나 몰입감 있는 플레이를 경험할 수 있습니다.</p>
+        </div>
+    </section>
+
+    <!-- Section 2: 주요 특징 및 모드 -->
+    <section id="features">
+        <div class="features-container">
+            <div class="title-wrapper">
+                <div class="section-title">주요 특징 및 모드</div>
+            </div>
+            <div class="card-row">
+                <!-- 서바이벌 카드 -->
+                <div class="card-col">
+                    <div class="feature-card">
+                        <h3>서바이벌 모드</h3>
+                        <p>자원을 채집하고 도구를 제작하며 밤마다 습격해오는 위험한 몹들로부터 살아남아야 합니다. 허기와 생명력을 관리하며 엔더 드래곤을 처치하는 모험의 재미를 선사합니다.</p>
+                    </div>
+                </div>
+                <!-- 크리에이티브 카드 -->
+                <div class="card-col">
+                    <div class="feature-card">
+                        <h3>크리에이티브 모드</h3>
+                        <p>무한한 자원과 비행 능력이 주어집니다. 어떤 방해도 받지 않고 대규모 건축물이나 레드스톤 회로 장치, 상상 속에만 그리던 완벽한 도시를 마음껏 설계할 수 있습니다.</p>
+                    </div>
+                </div>
+                <!-- 멀티플레이 카드 -->
+                <div class="card-col">
+                    <div class="feature-card">
+                        <h3>멀티플레이 요소</h3>
+                        <p>전 세계 친구 및 유저들과 함께 서버에 접속하여 협동 건축을 즐기거나 미니게임, PvP 대전 등 다채로운 콘텐츠 속에서 함께 소통하며 플레이할 수 있습니다.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 3: 최신 업데이트 소식 -->
+    <section id="updates">
+        <div class="title-wrapper">
+            <div class="section-title">최신 업데이트 소식</div>
+        </div>
+        <div class="update-banner">
+            <div class="update-tag">NEW DROP</div>
+            <h3>카오스 큐브 (Chaos Cubed) & 황황 동굴</h3>
+            <p>이번 최신 Drop 업데이트에서는 전례 없는 미지의 구역과 신비로운 블록들이 새롭게 추가되었습니다. 혼돈으로 가득 찬 공간 구조와 고유 생태계를 가진 '황황 동굴'에서 새로운 자원을 채굴하고 미스터리를 풀어보세요!</p>
+            <div class="sub-updates">
+                <h4>주요 변경점</h4>
+                <p style="font-size: 14px; color: #b0b0b0; margin-bottom: 0;">• 신규 지형: 황황 동굴 바이옴 및 유적 생성이 강화되었습니다.<br>• 신규 아이템: 혼돈의 속성을 담고 있는 카오스 큐브 블록 계열 추가.<br>• 시스템 안정성 및 렌더링 최적화 작업이 병행되었습니다.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 4: PC 시스템 사양 -->
+    <section id="specs">
+        <div class="specs-container">
+            <div class="title-wrapper">
+                <div class="section-title">PC 시스템 사양 (Java Edition)</div>
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>구분</th>
+                            <th>최소 사양</th>
+                            <th>권장 사양</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <strong><td>CPU</td></strong>
+                            <td>Intel Core i3-3210 / AMD A8-7600 또는 동급</td>
+                            <td>Intel Core i5-4690 / AMD A10-7800 또는 동급</td>
+                        </tr>
+                        <tr>
+                            <strong><td>RAM</td></strong>
+                            <td>4 GB RAM</td>
+                            <td>8 GB RAM</td>
+                        </tr>
+                        <tr>
+                            <strong><td>GPU (그래픽)</td></strong>
+                            <td>Intel HD Graphics 4000 / AMD Radeon R5 시리즈</td>
+                            <td>NVIDIA GeForce 700 시리즈 / AMD Radeon Rx 200 시리즈</td>
+                        </tr>
+                        <tr>
+                            <strong><td>OS (운영체제)</td></strong>
+                            <td>Windows 7 이상 (64비트)</td>
+                            <td>Windows 10 이상 (64비트)</td>
+                        </tr>
+                        <tr>
+                            <strong><td>저장공간</td></strong>
+                            <td>최소 4 GB (SSD 권장)</td>
+                            <td>4 GB 이상 고속 SSD</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- 푸터 영역 -->
+    <footer>
+        <p>© 2026 Minecraft Fan Page. Created for fans and updates.</p>
+        <p style="font-size: 12px; color: #555555;">본 페이지는 팬 메이드 사이트이며, Mojang Studios 및 Microsoft와 공식적으로 연관되어 있지 않습니다.</p>
+    </footer>
+
+    <!-- JavaScript 동적 배경화면 슬라이드 제어 (4초 주기 페이드 효과) -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var slides = document.querySelectorAll('.slide');
+            var currentSlide = 0;
+            var slideInterval = setInterval(nextSlide, 4000); // 4초마다 실행
+
+            function nextSlide() {
+                // 현재 슬라이드 활성화 해제
+                slides[currentSlide].classList.remove('active');
+                // 다음 슬라이드 인덱스 계산
+                currentSlide = (currentSlide + 1) % slides.length;
+                // 다음 슬라이드 활성화
+                slides[currentSlide].classList.add('active');
+            }
+        });
+    </script>
 </body>
 </html>
